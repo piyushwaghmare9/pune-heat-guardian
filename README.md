@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HeatGuard AI
 
-## Getting Started
+## Overview
+HeatGuard AI is an AI-powered urban heat intelligence and climate action platform designed for smarter, cooler cities. Initially focused on Pune, Maharashtra, India, the platform helps users understand urban heat conditions, explore interactive heat maps, receive AI-based tree recommendations, and plan plantation activities.
 
-First, run the development server:
+## Technology
+- Next.js (App Router)
+- React
+- TypeScript
+- Tailwind CSS
+- FastAPI (Backend - Future Phase)
+- MongoDB (Database - Future Phase)
 
+### Documentation
+- [Phase 1: Foundation](./PHASE_1_FOUNDATION.md)
+- [Phase 2: UI/UX Design System](./PHASE_2_UI_UX_DESIGN_SYSTEM.md)
+- [Phase 3: Landing Page & Navigation](./PHASE_3_LANDING_PAGE.md)
+- [Phase 4: Dashboard & Heat Intelligence](./PHASE_4_DASHBOARD_HEAT_INTELLIGENCE.md)
+- [Phase 5: Interactive Pune Heat Map](./PHASE_5_INTERACTIVE_HEAT_MAP_LIVE_DATA.md)
+- [Phase 6: AI Tree Recommendations & Plantation Planner](./PHASE_6_AI_TREE_RECOMMENDATIONS_PLANTATION.md)
+- [Phase 7: Impact Analytics, Community & Vendor Ecosystem](./PHASE_7_IMPACT_COMMUNITY_VENDOR_ECOSYSTEM.md)
+
+## Development
+To start developing locally:
+
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Note**: To view the component library, visit `/design-system` while running the local server.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Build for production:
+```bash
+npm run build
+```
 
-## Learn More
+## Project Structure
+- `app/`: Next.js App Router pages and layouts.
+- `components/`: Reusable React components grouped by feature (e.g., `ui/`, `layout/`).
+- `config/`: Application configuration (e.g., site metadata, heat risks).
+- `services/`: API integration services.
+- `types/`: TypeScript type definitions and domain models.
+- `public/`: Static assets.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Roadmap
+The website is being developed in 10 phases:
+- Phase 1: Next.js Foundation + Architecture
+- Phase 2: UI/UX Design System
+- Phase 3: Landing Page + Website Navigation
+- Phase 4: Dashboard + Heat Intelligence
+- Phase 5: Interactive Pune Heat Map + Live Data
+- Phase 6: AI Tree Recommendations + Plantation Planner
+- Phase 7: Impact Analytics + NGO + Vendor Ecosystem
+- [x] Phase 8: Authentication + User Profiles + Admin
+- [x] Phase 9: Responsive + Performance + Security + Testing
+- [x] Phase 10: Advanced Climate Action Intelligence, Project Lifecycle & Verification

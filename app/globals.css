@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Colors — Deep Forest Green palette */
+  --color-primary: #1a5632;
+  --color-primary-hover: #14472a;
+  --color-primary-active: #0f3920;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #0f172a; /* slate-900 */
+  --color-accent: #0284c7; /* sky-600 — slightly deeper */
+
+  /* Background Colors — Warm neutral surfaces */
+  --color-background: #fafaf9; /* stone-50 — warm white */
+  --color-surface: #f5f5f4; /* stone-100 */
+  --color-surface-elevated: #ffffff;
+  --color-surface-muted: #f0efed; /* warm gray */
+
+  /* Text Colors */
+  --color-foreground: #1c1917; /* stone-900 */
+  --color-foreground-secondary: #44403c; /* stone-700 */
+  --color-muted: #f0efed;
+  --color-muted-foreground: #78716c; /* stone-500 */
+  --color-disabled: #a8a29e; /* stone-400 */
+
+  /* Border Colors */
+  --color-border: #e7e5e4; /* stone-200 */
+  --color-border-subtle: #f0efed; /* stone-100 variant */
+  --color-border-strong: #d6d3d1; /* stone-300 */
+
+  /* Status Colors */
+  --color-success: #16a34a; /* green-600 — slightly richer */
+  --color-warning: #d97706; /* amber-600 */
+  --color-danger: #dc2626; /* red-600 */
+  --color-destructive: #dc2626;
+  --color-info: #2563eb; /* blue-600 */
+
+  /* Heat Intelligence Colors */
+  --color-heat-low: #16a34a; /* Green */
+  --color-heat-moderate: #ca8a04; /* Yellow-600 */
+  --color-heat-high: #ea580c; /* Orange-600 */
+  --color-heat-extreme: #dc2626; /* Red-600 */
+
+  /* Radius System */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-pill: 9999px;
+
+  /* Shadow System (Elevation) */
+  --shadow-none: 0 0 #0000;
+  --shadow-subtle: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-medium: 0 2px 8px -2px rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-elevated: 0 8px 24px -4px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.04);
+
+  /* Transition Tokens */
+  --transition-fast: 100ms;
+  --transition-normal: 150ms;
+  --transition-slow: 250ms;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-foreground);
+  background: var(--color-background);
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+
+/* Focus ring utility for interactive elements */
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+@layer utilities {
+  /* Typography Scale */
+  .text-display {
+    @apply text-4xl font-bold tracking-tight lg:text-5xl;
+  }
+  .text-h1 {
+    @apply text-3xl font-bold tracking-tight lg:text-4xl;
+  }
+  .text-h2 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+  .text-h3 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+  .text-body-large {
+    @apply text-lg leading-relaxed;
+  }
+  .text-body {
+    @apply text-base leading-relaxed;
+  }
+  .text-body-small {
+    @apply text-sm leading-normal;
+  }
+  .text-label {
+    @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+  }
+  .text-caption {
+    @apply text-xs text-muted-foreground;
+  }
+  .text-overline {
+    @apply text-[11px] font-semibold uppercase tracking-widest text-muted-foreground;
+  }
+  .text-metric {
+    @apply text-3xl font-bold tracking-tight;
+  }
+}
+
+/* Shimmer animation for skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-muted) 25%,
+    var(--color-surface) 37%,
+    var(--color-surface-muted) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
