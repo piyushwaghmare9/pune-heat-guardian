@@ -1,53 +1,35 @@
 import { NextResponse } from 'next/server';
-import { DEMO_USERS, DEMO_TOKENS } from '@/lib/demo/auth-data';
+import { adminAuth } from '@/lib/firebase/admin';
 import { cookies } from 'next/headers';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    const { idToken } = await request.json();
 
-    // Simulate backend lookup
-    const user = DEMO_USERS.find(u => u.email === email);
-
-    // Hardcoded demo password logic: let's say 'password123' works for everyone in demo
-    if (!user || password !== 'password123') {
-      return NextResponse.json(
-        { error: 'Invalid email or password' },
-        { status: 401 }
-      );
+    if (!idToken) {
+      return NextResponse.json({ error: 'Missing ID token' }, { status: 401 });
     }
 
-    if (user.status === 'SUSPENDED') {
-      return NextResponse.json(
-        { error: 'Your account is suspended. Please contact support.' },
-        { status: 403 }
-      );
-    }
+    // Set session expiration to 5 days
+    const expiresIn = 60 * 60 * 24 * 5 * 1000;
 
-    // Find the associated demo token
-    const tokenEntry = Object.entries(DEMO_TOKENS).find(([_, uid]) => uid === user.id);
-    const token = tokenEntry ? tokenEntry[0] : `demo-token-${user.id}`;
+    // Create the session cookie
+    const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
 
-    // Set secure HTTP-only cookie
     const cookieStore = await cookies();
-    cookieStore.set({
-      name: 'auth_token',
-      value: token,
+    cookieStore.set('session', sessionCookie, {
+      maxAge: expiresIn / 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      sameSite: 'lax',
     });
 
-    return NextResponse.json({
-      user,
-      message: 'Login successful'
-    });
+    return NextResponse.json({ status: 'success' }, { status: 200 });
   } catch (error) {
+    console.error('Login session error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error or invalid token' },
       { status: 500 }
     );
   }
