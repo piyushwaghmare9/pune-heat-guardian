@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
+
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -41,3 +42,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.pytest_cache/

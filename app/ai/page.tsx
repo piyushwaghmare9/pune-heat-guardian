@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { PageHeader } from "@/components/layout/page-header"
 import { EnvironmentalContext } from "@/components/ai/environmental-context"
 import { RecommendationCard } from "@/components/ai/recommendation-card"
+import { InterventionPanel } from "@/components/ml/intervention-panel"
 import { getTreeRecommendations } from "@/services/recommendationService"
 import { TreeRecommendation } from "@/types/tree"
 import { DEMO_REGIONS_SUMMARY } from "@/lib/demo/dashboard-data"
@@ -127,6 +128,14 @@ function AIRecommendationsContent() {
           )}
         </Button>
       </section>
+
+      {/* 3b. ML Intervention Simulator — shown when a region is selected */}
+      {selectedRegionId && (
+        <InterventionPanel
+          regionId={selectedRegionId}
+          treesToPlant={50}
+        />
+      )}
 
       {/* 4. Results Section */}
       {hasAnalyzed && recommendations.length > 0 && (

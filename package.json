@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:ml": "cd ml-model && uvicorn app.main:app --reload --port 8000",
+    "dev:all": "start \"HeatGuard Next.js\" cmd /k \"npm run dev\" && start \"HeatGuard ML Backend\" cmd /k \"npm run dev:ml\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

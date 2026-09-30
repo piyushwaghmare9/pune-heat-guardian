@@ -6,18 +6,36 @@ import { MapRegion } from "@/services/regionService"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { HeatRiskBadge } from "@/components/heat/heat-risk-badge"
-import { X, ArrowRight, Activity, Thermometer, Droplets, Sparkles, Sprout, Store, Users, ShieldCheck, Database } from "lucide-react"
+import { ModelBadge } from "@/components/ml/model-badge"
+import { X, ArrowRight, Activity, Thermometer, Droplets, Sparkles, Sprout, Store, Users, ShieldCheck, Database, BrainCircuit } from "lucide-react"
 import { TreeRecommendation } from "@/types/tree"
+import { WardPredictionSummary } from "@/types/ml"
+import { getLiveWeather, type LiveWeatherData } from "@/services/weatherService"
 
 interface SelectedRegionPanelProps {
   region: MapRegion
   trees?: TreeRecommendation[]
   isLoadingTrees?: boolean
   onClose: () => void
+  mlPrediction?: WardPredictionSummary
 }
 
-export function SelectedRegionPanel({ region, trees, isLoadingTrees, onClose }: SelectedRegionPanelProps) {
+export function SelectedRegionPanel({ region, trees, isLoadingTrees, onClose, mlPrediction }: SelectedRegionPanelProps) {
   const env = region.environmental
+  const [liveWeather, setLiveWeather] = React.useState<LiveWeatherData | null>(null)
+
+  React.useEffect(() => {
+    let active = true
+    if (region.center) {
+      getLiveWeather(region.center.lat, region.center.lng)
+        .then(data => {
+          if (active) setLiveWeather(data)
+        })
+        .catch(() => {})
+    }
+    return () => { active = false }
+  }, [region.center])
+
 
   return (
     <div className="w-full h-full flex flex-col bg-surface overflow-hidden">
@@ -54,22 +72,36 @@ export function SelectedRegionPanel({ region, trees, isLoadingTrees, onClose }: 
             <div className="p-3 rounded-xl bg-surface-elevated border border-border/70 shadow-xs">
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
                 <Thermometer className="h-3.5 w-3.5 text-heat-high" />
-                <span>Peak Temp</span>
+                <span>Measured</span>
               </div>
               <div className="text-xl font-extrabold text-foreground">
                 {env.temperature ?? "--"}&deg;C
               </div>
+              <ModelBadge source="dataset" compact />
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-elevated border border-border/70 shadow-xs">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-                <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                <span>Heat Risk</span>
+            {mlPrediction ? (
+              <div className="p-3 rounded-xl bg-violet-500/10 border border-violet-500/30 shadow-xs">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+                  <BrainCircuit className="h-3.5 w-3.5 text-violet-500" />
+                  <span>Predicted</span>
+                </div>
+                <div className="text-xl font-extrabold text-foreground">
+                  {mlPrediction.predicted_temp_c.toFixed(1)}&deg;C
+                </div>
+                <ModelBadge source="model" modelVersion={mlPrediction.model_version} compact />
               </div>
-              <div className="mt-0.5">
-                <HeatRiskBadge level={region.risk || "LOW"} />
+            ) : (
+              <div className="p-3 rounded-xl bg-surface-elevated border border-border/70 shadow-xs">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+                  <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                  <span>Heat Risk</span>
+                </div>
+                <div className="mt-0.5">
+                  <HeatRiskBadge level={region.risk || "LOW"} />
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-border/70 shadow-xs">
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
@@ -77,7 +109,7 @@ export function SelectedRegionPanel({ region, trees, isLoadingTrees, onClose }: 
                 <span>Humidity</span>
               </div>
               <div className="text-base font-bold text-foreground">
-                {env.humidity ? `${env.humidity}%` : "45% (Est.)"}
+                {liveWeather ? `${Math.round(liveWeather.humidity)}%` : (env.humidity ? `${env.humidity}%` : "55% (Est.)")}
               </div>
             </div>
 
@@ -87,7 +119,7 @@ export function SelectedRegionPanel({ region, trees, isLoadingTrees, onClose }: 
                 <span>Air Quality</span>
               </div>
               <div className="text-base font-bold text-foreground">
-                {env.aqi ? `${env.aqi} AQI` : "120 AQI"}
+                {liveWeather ? `${Math.round(liveWeather.aqi)} AQI` : (env.aqi ? `${env.aqi} AQI` : "105 AQI (Est.)")}
               </div>
             </div>
           </div>

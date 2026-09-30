@@ -1,18 +1,15 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { 
   LayoutDashboard, 
   Map, 
   BrainCircuit, 
-  Sprout, 
   BarChart3, 
-  Users, 
   Store, 
   UserCircle, 
-  Settings, 
   Bell, 
   Search, 
   Menu, 
@@ -20,12 +17,16 @@ import {
   LogOut, 
   ShieldCheck, 
   Leaf,
-  MapPin
+  MapPin,
+  Flame,
+  BarChart2,
+  AlertTriangle,
+  TrendingUp
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { SidebarItem, SidebarSectionHeader } from "@/components/layout/sidebar"
+import { SidebarItem } from "@/components/layout/sidebar"
 import { useAuth } from "@/hooks/useAuth"
 
 interface AppShellProps {
@@ -37,17 +38,16 @@ export function AppShell({ children }: AppShellProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const { user, logout } = useAuth()
 
-  const platformLinks = [
-    { title: "Dashboard Overview", href: "/dashboard", icon: LayoutDashboard },
-    { title: "Pune Heat Map", href: "/map", icon: Map },
-    { title: "AI Recommendations", href: "/ai", icon: BrainCircuit },
-    { title: "Plantation Planner", href: "/plantation", icon: Sprout },
-    { title: "Impact Analytics", href: "/impact", icon: BarChart3 },
-  ]
-
-  const ecosystemLinks = [
-    { title: "Community & NGOs", href: "/community", icon: Users },
+  const navItems = [
+    { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { title: "Heat Map", href: "/map", icon: Map },
+    { title: "Hotspots", href: "/hotspots", icon: Flame },
+    { title: "AI Tree Recommendations", href: "/ai", icon: BrainCircuit },
+    { title: "Analytics", href: "/analytics", icon: BarChart2 },
     { title: "Green Vendors", href: "/vendors", icon: Store },
+    { title: "My Impact", href: "/impact", icon: TrendingUp },
+    { title: "Alerts", href: "/alerts", icon: AlertTriangle },
+    { title: "Profile", href: "/profile", icon: UserCircle },
   ]
 
   const isCurrentActive = (href: string) => {
@@ -75,9 +75,8 @@ export function AppShell({ children }: AppShellProps) {
       </div>
 
       {/* Nav Links */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-        <SidebarSectionHeader title="Platform" />
-        {platformLinks.map((link) => (
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+        {navItems.map((link) => (
           <SidebarItem
             key={link.href}
             title={link.title}
@@ -88,35 +87,20 @@ export function AppShell({ children }: AppShellProps) {
           />
         ))}
 
-        <SidebarSectionHeader title="Ecosystem" />
-        {ecosystemLinks.map((link) => (
-          <SidebarItem
-            key={link.href}
-            title={link.title}
-            href={link.href}
-            icon={link.icon}
-            isActive={isCurrentActive(link.href)}
-            onClick={onNavigate}
-          />
-        ))}
-
-        <SidebarSectionHeader title="Account" />
-        <SidebarItem
-          title="Profile & Preferences"
-          href="/profile"
-          icon={UserCircle}
-          isActive={pathname === "/profile"}
-          onClick={onNavigate}
-        />
         {user?.role === "ADMIN" && (
-          <SidebarItem
-            title="Admin Console"
-            href="/admin"
-            icon={ShieldCheck}
-            isActive={pathname.startsWith("/admin")}
-            badge="Admin"
-            onClick={onNavigate}
-          />
+          <>
+            <div className="px-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80 mb-1.5 mt-5">
+              Admin
+            </div>
+            <SidebarItem
+              title="Admin Console"
+              href="/admin"
+              icon={ShieldCheck}
+              isActive={pathname.startsWith("/admin")}
+              badge="Admin"
+              onClick={onNavigate}
+            />
+          </>
         )}
       </div>
 

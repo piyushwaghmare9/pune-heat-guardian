@@ -35,6 +35,29 @@ npm run dev
 
 > **Note**: To view the component library, visit `/design-system` while running the local server.
 
+### Running Frontend + ML Service Together
+
+You can run both the Next.js frontend and the FastAPI ML inference service simultaneously:
+
+```bash
+# Option A: Run single command (Windows opens two terminal windows)
+npm run dev:all
+
+# Option B: Run via script
+dev.bat        # Windows CMD
+.\dev.ps1      # Windows PowerShell
+
+# Option C: In two separate terminals
+# Terminal 1 (Frontend):
+npm run dev
+# Terminal 2 (ML Service):
+npm run dev:ml
+```
+
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **ML API Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ML Service Details**: See [`ml-model/README.md`](./ml-model/README.md)
+
 3. Build for production:
 ```bash
 npm run build
